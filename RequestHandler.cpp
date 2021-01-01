@@ -6,13 +6,18 @@
  */
 
 #include "RequestHandler.h"
+#include "GeneralException.h"
 
 RequestHandler::RequestHandler() {
-	// TODO Auto-generated constructor stub
-
 }
 
 RequestHandler::~RequestHandler() {
-	// TODO Auto-generated destructor stub
 }
 
+Response* RequestHandler::handle(Request* req){
+	if (!this->canHandle(req)){
+		throw GeneralException("This request handler cannot handle this request");
+	}
+
+	return this->handleInner(req);
+}

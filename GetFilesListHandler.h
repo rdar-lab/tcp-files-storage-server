@@ -8,10 +8,14 @@
 #ifndef GETFILESLISTHANDLER_H_
 #define GETFILESLISTHANDLER_H_
 
-class GetFilesListHandler {
+#include "RequestHandler.h"
+
+class GetFilesListHandler : public RequestHandler  {
 public:
 	GetFilesListHandler();
 	virtual ~GetFilesListHandler();
+	virtual bool canHandle(Request* req) override;
+	virtual Response* handleInner(Request* req) override;
 };
 #endif /* GETFILESLISTHANDLER_H_ */
 

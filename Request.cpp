@@ -8,11 +8,8 @@
 #include "Request.h"
 
 Request::Request() {
-	// TODO Auto-generated constructor stub
-
 }
 
 Request::~Request() {
-	// TODO Auto-generated destructor stub
 }
 

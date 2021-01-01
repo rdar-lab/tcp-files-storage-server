@@ -10,9 +10,12 @@
 
 class CommunicationManager {
 public:
-	CommunicationManager(int port);
+	static CommunicationManager* getInstance();
 	virtual ~CommunicationManager();
-	void startServer();
+	void startServer(unsigned int port);
+	void stopServer();
+private:
+	CommunicationManager();
 };
 
 #endif /* COMMUNICATIONMANAGER_H_ */

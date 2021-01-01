@@ -8,10 +8,14 @@
 #ifndef DOWNLOADFILEHANDLER_H_
 #define DOWNLOADFILEHANDLER_H_
 
-class DownloadFileHandler {
+#include "RequestHandler.h"
+
+class DownloadFileHandler : public RequestHandler {
 public:
 	DownloadFileHandler();
 	virtual ~DownloadFileHandler();
+	virtual bool canHandle(Request* req) override;
+	virtual Response* handleInner(Request* req) override;
 };
 #endif /* DOWNLOADFILEHANDLER_H_ */
 

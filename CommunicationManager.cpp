@@ -8,8 +8,6 @@
 #include "CommunicationManager.h"
 
 CommunicationManager::CommunicationManager() {
-	// TODO Auto-generated constructor stub
-
 }
 
 CommunicationManager::~CommunicationManager() {
