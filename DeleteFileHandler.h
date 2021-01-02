@@ -15,6 +15,7 @@ public:
 	DeleteFileHandler();
 	virtual ~DeleteFileHandler();
 	virtual bool canHandle(Request* req) override;
+protected:
 	virtual Response* handleInner(Request* req) override;
 };
 #endif /* DELETEFILEHANDLER_H_ */

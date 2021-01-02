@@ -5,12 +5,34 @@
  *      Author: xmaster
  */
 
+#include <iostream>
+#include <ctime>
+#include <unistd.h>
+
 #include "GetFilesListHandler.h"
 #include "FilesRepository.h"
+#include "Constants.h"
+#include "StrByteBuffer.h"
 
-#define GET_FILE_NAMES_OP 202
-#define GET_FILE_NAMES_SUCCESS_STATUS 211
-#define GET_FILE_NAMES_FAILURE_NO_FILES_FOR_USER 1002
+std::string gen_random(const int len) {
+
+	std::string tmp_s;
+    static const char alphanum[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+
+    srand( (unsigned) time(NULL) * getpid());
+
+    tmp_s.reserve(len);
+
+    for (int i = 0; i < len; ++i)
+        tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
+
+
+    return tmp_s;
+
+}
 
 
 GetFilesListHandler::GetFilesListHandler() {
@@ -24,11 +46,18 @@ bool GetFilesListHandler::canHandle(Request* req) {
 }
 
 std::string generateRandomFilename(){
-
+	return gen_random(32);
 }
 
 ByteBuffer* generateFileNamesFileResponse(std::list<std::string> fileNames){
+	std::string fullResult = "";
+	for (std::list<std::string>::iterator names_it = fileNames.begin();
+	                        names_it != fileNames.end(); ++names_it)
+	{
+		fullResult = fullResult + (*names_it) + "\n";
+	}
 
+	return new StrByteBuffer(fullResult);
 }
 
 Response* GetFilesListHandler::handleInner(Request* req) {

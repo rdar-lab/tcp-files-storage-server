@@ -6,13 +6,25 @@
  */
 
 #include "ResponseWriter.h"
+#include "CommunicationSerilizationHelper.h"
 
-ResponseWriter::ResponseWriter() {
-	// TODO Auto-generated constructor stub
-
+ResponseWriter::ResponseWriter(boost::asio::ip::tcp::socket *socket) {
+	this->socket = socket;
 }
 
 ResponseWriter::~ResponseWriter() {
-	// TODO Auto-generated destructor stub
 }
 
+void ResponseWriter::writeResponse(Response *resp) {
+	CommunicationSerilizationHelper helper(socket);
+	helper.writeByte(resp->getVersion());
+	helper.writeShort(resp->getStatus());
+
+	if (resp->getStatus() < 1002 ){
+		helper.writeStr(resp->getFileName());
+	}
+
+	if (resp->getStatus() < 212 ){
+		helper.writeBytes(resp->getPayload());
+	}
+}

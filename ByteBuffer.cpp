@@ -6,13 +6,25 @@
  */
 
 #include "ByteBuffer.h"
+#include "Constants.h"
+#include "GeneralException.h"
 
 ByteBuffer::ByteBuffer() {
-	// TODO Auto-generated constructor stub
-
 }
 
 ByteBuffer::~ByteBuffer() {
-	// TODO Auto-generated destructor stub
 }
 
+void ByteBuffer::sendToStream(std::ostream &os) {
+	char buffer[BUFFER_SIZE];
+	while (this->getBytesLeft()>0){
+		short amount = this->readData(buffer, BUFFER_SIZE);
+		if (amount <= 0)
+		{
+			throw GeneralException("Invalid state detected, read data returned non positive value");
+		} else
+		{
+			os.write(buffer, amount);
+		}
+	}
+}

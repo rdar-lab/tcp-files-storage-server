@@ -7,12 +7,9 @@
 
 #include "DeleteFileHandler.h"
 #include "GeneralException.h"
-#include "FilesRepository.h";
+#include "FilesRepository.h"
 #include "FileNotFoundException.h"
-
-#define DELETE_FILE_OP 201
-#define DELETE_FILE_SUCCESS_STATUS 212
-#define DELETE_FILE_FAILURE_NOT_FOUND_STATUS 1001
+#include "Constants.h"
 
 DeleteFileHandler::DeleteFileHandler() {
 }

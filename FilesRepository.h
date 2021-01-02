@@ -23,6 +23,7 @@ public:
 	std::list<std::string> getFileNames(unsigned int userId);
 private:
 	FilesRepository();
+	static FilesRepository* singleInstance;
 };
 #endif /* FILESREPOSITORY_H_ */
 

@@ -8,8 +8,9 @@
 #ifndef REQUESTHANDLERFACTORY_H_
 #define REQUESTHANDLERFACTORY_H_
 
-#include "Request.h";
-#include "RequestHandler.h";
+#include "Request.h"
+#include <list>
+#include "RequestHandler.h"
 
 class RequestHandlerFactory {
 public:
@@ -20,6 +21,8 @@ public:
 	void registerHandler(RequestHandler* handler);
 private:
 	RequestHandlerFactory();
+	static RequestHandlerFactory* singleInstance;
+	std::list<RequestHandler*> handlersList;
 };
 
 #endif /* REQUESTHANDLERFACTORY_H_ */

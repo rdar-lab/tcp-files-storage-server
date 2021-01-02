@@ -8,10 +8,7 @@
 #include "DownloadFileHandler.h"
 #include "FilesRepository.h"
 #include "FileNotFoundException.h"
-
-#define DOWLOAD_FILE_OP 200
-#define DOWLOAD_FILE_SUCCESS_STATUS 210
-#define DOWLOAD_FILE_FAILURE_NOT_FOUND_STATUS 1001
+#include "Constants.h"
 
 
 DownloadFileHandler::DownloadFileHandler() {

@@ -7,10 +7,7 @@
 
 #include "UploadFileHandler.h"
 #include "FilesRepository.h"
-
-#define UPLOAD_FILE_OP 202
-#define UPLOAD_FILE_SUCCESS_STATUS 211
-
+#include "Constants.h"
 
 UploadFileHandler::UploadFileHandler() {
 }

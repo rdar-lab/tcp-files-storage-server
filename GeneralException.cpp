@@ -7,12 +7,9 @@
 
 #include "GeneralException.h"
 
-GeneralException::GeneralException() {
-	// TODO Auto-generated constructor stub
-
+GeneralException::GeneralException(std::string messsage) : std::runtime_error(messsage) {
 }
 
 GeneralException::~GeneralException() {
-	// TODO Auto-generated destructor stub
 }
 

@@ -15,6 +15,7 @@ public:
 	UploadFileHandler();
 	virtual ~UploadFileHandler();
 	virtual bool canHandle(Request* req) override;
+protected:
 	virtual Response* handleInner(Request* req) override;
 };
 #endif /* UPLOADFILEHANDLER_H_ */

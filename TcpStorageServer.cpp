@@ -10,14 +10,33 @@
 #include <iostream>
 #include "ConfigurationFileReader.h"
 #include "CommunicationManager.h"
-
-#define CONFIGURATION_FILE_LOCATION "port.info"
+#include "Constants.h"
+#include "RequestHandlerFactory.h"
+#include "UploadFileHandler.h"
+#include "DownloadFileHandler.h"
+#include "DeleteFileHandler.h"
+#include "GetFilesListHandler.h"
+#include "FilesRepository.h"
 
 int main() {
-	ConfigurationFileReader reader(CONFIGURATION_FILE_LOCATION);
-	unsigned int port = reader.getServerPort();
+	// Register handlers
+	RequestHandlerFactory::getInstance()->registerHandler(new UploadFileHandler());
+	RequestHandlerFactory::getInstance()->registerHandler(new DownloadFileHandler());
+	RequestHandlerFactory::getInstance()->registerHandler(new DeleteFileHandler());
+	RequestHandlerFactory::getInstance()->registerHandler(new GetFilesListHandler());
 
-	std::cout << "String server at port " << port << std::endl;
-	CommunicationManager::getInstance()->startServer(port);
+	// Make a call to init the storage location
+	FilesRepository::getInstance();
+
+	try{
+		ConfigurationFileReader reader(CONFIGURATION_FILE_LOCATION);
+		std::string host = reader.getServerHost();
+		unsigned short port = reader.getServerPort();
+
+		std::cout << "String server at " << host << ":" << port << std::endl;
+		CommunicationManager::getInstance()->runServer(host, port);
+	} catch (std::exception &exp){
+		std::cout << "error: " << exp.what() << std::endl;
+	}
 	return 0;
 }

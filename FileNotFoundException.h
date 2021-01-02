@@ -10,7 +10,7 @@
 
 #include <stdexcept>
 
-class FileNotFoundException: public std::runtime_error {
+class FileNotFoundException: public std::exception {
 public:
 	FileNotFoundException();
 	virtual ~FileNotFoundException();

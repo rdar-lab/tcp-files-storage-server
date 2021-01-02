@@ -13,19 +13,20 @@
 
 class Request {
 public:
-	Request();
+	Request(unsigned short version,
+			unsigned int userId,
+			unsigned short op,
+			std::string fileName,
+			ByteBuffer* payload
+	);
 	virtual ~Request();
 
-	unsigned int getVersion();
-	void setVersion(unsigned int version);
-	unsigned int getUserId();
-	void setUserId(unsigned int userId);
-	unsigned int getOp();
-	void setOp(unsigned int op);
-	std::string getFileName();
-	void setFileName(std::string fileName);
-	ByteBuffer* getPayload();
-	void setPayload(ByteBuffer* buffer);
+	unsigned short getVersion() const;
+	unsigned int getUserId() const;
+	unsigned short getOp() const;
+	std::string getFileName() const;
+	ByteBuffer* getPayload() const;
+	friend std::ostream& operator<<(std::ostream& os, const Request& req);
 private:
 	unsigned int version = 0;
 	unsigned int userId = 0;

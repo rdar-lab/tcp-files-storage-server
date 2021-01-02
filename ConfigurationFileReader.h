@@ -13,9 +13,13 @@ class ConfigurationFileReader {
 public:
 	ConfigurationFileReader(std::string configurationFileName);
 
-	unsigned int getServerPort();
+	unsigned short getServerPort();
+	std::string getServerHost();
 
 	virtual ~ConfigurationFileReader();
+private:
+	unsigned int serverPort;
+	std::string serverHost;
 };
 
 #endif /* CONFIGURATIONFILEREADER_H_ */

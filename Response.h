@@ -14,17 +14,15 @@
 
 class Response {
 public:
-	Response();
-	Response(unsigned int status);
-	Response(unsigned int status, std::string fileName);
-	Response(unsigned int status, std::string fileName, ByteBuffer* payload);
+	Response(unsigned short status);
+	Response(unsigned short status, std::string fileName);
+	Response(unsigned short status, std::string fileName, ByteBuffer* payload);
 	virtual ~Response();
-	unsigned int getVersion();
-	unsigned int getStatus();
-	std::string getFileName();
-	void setFileName(std::string fileName);
-	ByteBuffer* getPayload();
-	void setPayload(ByteBuffer* payload);
+	unsigned short getVersion() const;
+	unsigned short getStatus() const ;
+	std::string getFileName() const;
+	ByteBuffer* getPayload() const;
+	friend std::ostream& operator<<(std::ostream& os, const Response& resp);
 private:
 	unsigned int version = 0;
 	unsigned int status = 0;

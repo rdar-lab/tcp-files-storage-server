@@ -15,6 +15,7 @@ public:
 	GetFilesListHandler();
 	virtual ~GetFilesListHandler();
 	virtual bool canHandle(Request* req) override;
+protected:
 	virtual Response* handleInner(Request* req) override;
 };
 #endif /* GETFILESLISTHANDLER_H_ */
