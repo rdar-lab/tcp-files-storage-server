@@ -2,7 +2,7 @@
  * GetFilesListHandler.h
  *
  *  Created on: 27 Dec 2020
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef GETFILESLISTHANDLER_H_
@@ -10,13 +10,14 @@
 
 #include "RequestHandler.h"
 
-class GetFilesListHandler : public RequestHandler  {
+class GetFilesListHandler: public RequestHandler
+{
 public:
 	GetFilesListHandler();
 	virtual ~GetFilesListHandler();
-	virtual bool canHandle(Request* req) override;
+	virtual bool canHandle(Request *req) override;
 protected:
-	virtual Response* handleInner(Request* req) override;
+	virtual Response* handleInner(Request *req) override;
 };
 #endif /* GETFILESLISTHANDLER_H_ */
 

@@ -2,7 +2,7 @@
  * CommunicationUtils.cpp
  *
  *  Created on: 2 Jan 2021
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #include "CommunicationSerilizationHelper.h"
@@ -10,107 +10,137 @@
 #include "SocketByteBuffer.h"
 #include "Constants.h"
 
-unsigned int convertToNum(char* buff, unsigned short sizeOfBuffer){
+unsigned int convertToNum(char *buff, unsigned short sizeOfBuffer)
+{
 	unsigned int result = 0;
-	for (int i=sizeOfBuffer-1; i>=0; i--){
+	for (int i = sizeOfBuffer - 1; i >= 0; i--)
+	{
 		result = result << 8;
 		result = result + buff[i];
 	}
 	return result;
 }
 
-void convertToBytes(unsigned int num, char* buff, unsigned short sizeOfBuffer){
+void convertToBytes(unsigned int num, char *buff, unsigned short sizeOfBuffer)
+{
 	unsigned int temp = num;
-	for (int i=0; i<sizeOfBuffer; i++){
+	for (int i = 0; i < sizeOfBuffer; i++)
+	{
 		char currByte = temp & 0xFF;
 		buff[i] = currByte;
 		temp = temp >> 8;
 	}
 }
 
-
-unsigned int readNum(boost::asio::ip::tcp::socket *socket, unsigned short sizeToRead){
+unsigned int readNum(boost::asio::ip::tcp::socket *socket,
+		unsigned short sizeToRead)
+{
 	char buffer[sizeToRead];
-	size_t bytesRead = boost::asio::read(*socket, boost::asio::buffer(buffer, sizeToRead));
-	if(bytesRead < sizeToRead){
+	size_t bytesRead = boost::asio::read(*socket,
+			boost::asio::buffer(buffer, sizeToRead));
+	if (bytesRead < sizeToRead)
+	{
 		throw GeneralException("Socket closed");
 	}
 	return convertToNum(buffer, sizeToRead);
 }
 
-void writeNum(boost::asio::ip::tcp::socket *socket, unsigned int num, unsigned short sizeToWrite){
+void writeNum(boost::asio::ip::tcp::socket *socket, unsigned int num,
+		unsigned short sizeToWrite)
+{
 	char buffer[sizeToWrite];
 	convertToBytes(num, buffer, sizeToWrite);
 
-	size_t bytesWrote = boost::asio::write(*socket, boost::asio::buffer(buffer, sizeToWrite));
-	if(bytesWrote != sizeToWrite){
+	size_t bytesWrote = boost::asio::write(*socket,
+			boost::asio::buffer(buffer, sizeToWrite));
+	if (bytesWrote != sizeToWrite)
+	{
 		throw GeneralException("Incorrect write size detected");
 	}
 }
 
 CommunicationSerilizationHelper::CommunicationSerilizationHelper(
-		boost::asio::ip::tcp::socket *socket) {
+		boost::asio::ip::tcp::socket *socket)
+{
 	this->socket = socket;
 }
 
-CommunicationSerilizationHelper::~CommunicationSerilizationHelper() {
+CommunicationSerilizationHelper::~CommunicationSerilizationHelper()
+{
 }
 
-unsigned short CommunicationSerilizationHelper::readByte() {
+unsigned short CommunicationSerilizationHelper::readByte()
+{
 	return readNum(socket, 1);
 }
 
-void CommunicationSerilizationHelper::writeByte(unsigned short data) {
+void CommunicationSerilizationHelper::writeByte(unsigned short data)
+{
 	writeNum(socket, data, 1);
 }
 
-unsigned short CommunicationSerilizationHelper::readShort() {
+unsigned short CommunicationSerilizationHelper::readShort()
+{
 	return readNum(socket, 2);
 }
 
-void CommunicationSerilizationHelper::writeShort(unsigned short data) {
+void CommunicationSerilizationHelper::writeShort(unsigned short data)
+{
 	writeNum(socket, data, 2);
 }
 
-unsigned int CommunicationSerilizationHelper::readInt() {
+unsigned int CommunicationSerilizationHelper::readInt()
+{
 	return readNum(socket, 4);
 }
 
-void CommunicationSerilizationHelper::writeInt(unsigned int data) {
+void CommunicationSerilizationHelper::writeInt(unsigned int data)
+{
 	writeNum(socket, data, 4);
 }
 
-std::string CommunicationSerilizationHelper::readStr(unsigned short size) {
-	char buffer[size+1];
-	size_t bytesRead = boost::asio::read(*socket, boost::asio::buffer(buffer, size));
-	if(bytesRead < size){
+std::string CommunicationSerilizationHelper::readStr(unsigned short size)
+{
+	char buffer[size + 1];
+	size_t bytesRead = boost::asio::read(*socket,
+			boost::asio::buffer(buffer, size));
+	if (bytesRead < size)
+	{
 		throw GeneralException("Socket closed");
 	}
 	buffer[size] = 0;
 	return std::string(buffer);
 }
 
-void CommunicationSerilizationHelper::writeStr(std::string data) {
+void CommunicationSerilizationHelper::writeStr(std::string data)
+{
 	unsigned short dataLen = data.length();
 	writeShort(dataLen);
-	size_t bytesWrote = boost::asio::write(*socket, boost::asio::buffer(data, data.length()));
-	if(bytesWrote != data.length()){
+	size_t bytesWrote = boost::asio::write(*socket,
+			boost::asio::buffer(data, data.length()));
+	if (bytesWrote != data.length())
+	{
 		throw GeneralException("Incorrect write size detected");
 	}
 
 }
 
-ByteBuffer* CommunicationSerilizationHelper::readBytes(unsigned int size) {
+ByteBuffer* CommunicationSerilizationHelper::readBytes(unsigned int size)
+{
 	return new SocketByteBuffer(this->socket, size);
 }
 
-void CommunicationSerilizationHelper::writeBytes(ByteBuffer *data) {
+void CommunicationSerilizationHelper::writeBytes(ByteBuffer *data)
+{
 	char buffer[BUFFER_SIZE];
 	writeInt(data->getBytesLeft());
-	while (data->getBytesLeft()>0){
+	while (data->getBytesLeft() > 0)
+	{
 		unsigned short dataRead = data->readData(buffer, BUFFER_SIZE);
-		size_t bytesWrote = boost::asio::write(*socket, boost::asio::buffer(buffer, dataRead));
-		if(bytesWrote != dataRead){
+		size_t bytesWrote = boost::asio::write(*socket,
+				boost::asio::buffer(buffer, dataRead));
+		if (bytesWrote != dataRead)
+		{
 			throw GeneralException("Incorrect write size detected");
 		}
 	}

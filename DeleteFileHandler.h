@@ -2,7 +2,7 @@
  * DeleteFileHandler.h
  *
  *  Created on: 27 Dec 2020
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef DELETEFILEHANDLER_H_
@@ -10,13 +10,14 @@
 
 #include "RequestHandler.h"
 
-class DeleteFileHandler : public RequestHandler {
+class DeleteFileHandler: public RequestHandler
+{
 public:
 	DeleteFileHandler();
 	virtual ~DeleteFileHandler();
-	virtual bool canHandle(Request* req) override;
+	virtual bool canHandle(Request *req) override;
 protected:
-	virtual Response* handleInner(Request* req) override;
+	virtual Response* handleInner(Request *req) override;
 };
 #endif /* DELETEFILEHANDLER_H_ */
 

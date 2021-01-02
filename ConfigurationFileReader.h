@@ -2,14 +2,15 @@
  * ConfigurationFileReader.h
  *
  *  Created on: 1 Jan 2021
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef CONFIGURATIONFILEREADER_H_
 #define CONFIGURATIONFILEREADER_H_
 #include <string>
 
-class ConfigurationFileReader {
+class ConfigurationFileReader
+{
 public:
 	ConfigurationFileReader(std::string configurationFileName);
 

@@ -2,7 +2,7 @@
  * FileByteBuffer.h
  *
  *  Created on: 2 Jan 2021
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef FILEBYTEBUFFER_H_
@@ -13,7 +13,8 @@
 #include "ByteBuffer.h"
 #include <fstream>
 
-class FileByteBuffer: public ByteBuffer {
+class FileByteBuffer: public ByteBuffer
+{
 public:
 	FileByteBuffer(std::string filePath);
 	virtual ~FileByteBuffer();

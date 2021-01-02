@@ -2,7 +2,7 @@
  * StrBytesBuffer.h
  *
  *  Created on: 2 Jan 2021
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef STRBYTEBUFFER_H_
@@ -10,7 +10,8 @@
 
 #include "ByteBuffer.h"
 
-class StrByteBuffer: public ByteBuffer {
+class StrByteBuffer: public ByteBuffer
+{
 public:
 	StrByteBuffer(std::string str);
 	virtual ~StrByteBuffer();

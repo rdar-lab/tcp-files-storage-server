@@ -2,7 +2,7 @@
  * RequestReader.cpp
  *
  *  Created on: 27 Dec 2020
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #include <string>
@@ -11,20 +11,24 @@
 #include "CommunicationSerilizationHelper.h"
 #include "GeneralException.h"
 
-RequestReader::RequestReader(boost::asio::ip::tcp::socket *socket) {
+RequestReader::RequestReader(boost::asio::ip::tcp::socket *socket)
+{
 	this->socket = socket;
 }
 
-RequestReader::~RequestReader() {
+RequestReader::~RequestReader()
+{
 }
 
-Request* RequestReader::readRequest() {
+Request* RequestReader::readRequest()
+{
 	CommunicationSerilizationHelper helper(this->socket);
 	unsigned int userId = helper.readInt();
 	unsigned short version = helper.readByte();
 	unsigned short op = helper.readByte();
 	std::string fileName = "";
-	if (op < 202){
+	if (op < 202)
+	{
 		unsigned short nameLen = helper.readShort();
 		if (nameLen > MAX_FILE_NAME_LENGTH)
 		{
@@ -33,11 +37,12 @@ Request* RequestReader::readRequest() {
 		fileName = helper.readStr(nameLen);
 	}
 
-	ByteBuffer* payload = NULL;
+	ByteBuffer *payload = NULL;
 	if (op == 100)
 	{
 		unsigned int payloadLen = helper.readInt();
-		if (payloadLen > MAX_PAYLOAD_SIZE_BYTES){
+		if (payloadLen > MAX_PAYLOAD_SIZE_BYTES)
+		{
 			throw GeneralException("Payload is over the maximum length");
 		}
 		payload = helper.readBytes(payloadLen);

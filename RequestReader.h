@@ -2,7 +2,7 @@
  * RequestReader.h
  *
  *  Created on: 27 Dec 2020
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef REQUESTREADER_H_
@@ -11,8 +11,8 @@
 #include "Request.h"
 #include <boost/asio.hpp>
 
-
-class RequestReader {
+class RequestReader
+{
 public:
 	RequestReader(boost::asio::ip::tcp::socket *socket);
 	Request* readRequest();

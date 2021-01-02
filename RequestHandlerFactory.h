@@ -2,7 +2,7 @@
  * RequestHandlerFactory.h
  *
  *  Created on: 1 Jan 2021
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef REQUESTHANDLERFACTORY_H_
@@ -12,16 +12,17 @@
 #include <list>
 #include "RequestHandler.h"
 
-class RequestHandlerFactory {
+class RequestHandlerFactory
+{
 public:
 	static RequestHandlerFactory* getInstance();
 	virtual ~RequestHandlerFactory();
 
-	RequestHandler* getHandlerForRequest(Request* req);
-	void registerHandler(RequestHandler* handler);
+	RequestHandler* getHandlerForRequest(Request *req);
+	void registerHandler(RequestHandler *handler);
 private:
 	RequestHandlerFactory();
-	static RequestHandlerFactory* singleInstance;
+	static RequestHandlerFactory *singleInstance;
 	std::list<RequestHandler*> handlersList;
 };
 

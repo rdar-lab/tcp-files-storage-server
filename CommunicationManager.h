@@ -2,7 +2,7 @@
  * CommunicationManager.h
  *
  *  Created on: 27 Dec 2020
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef COMMUNICATIONMANAGER_H_
@@ -13,8 +13,8 @@
 
 typedef boost::shared_ptr<boost::asio::ip::tcp::socket> socket_ptr;
 
-
-class CommunicationManager {
+class CommunicationManager
+{
 public:
 	static CommunicationManager* getInstance();
 	virtual ~CommunicationManager();

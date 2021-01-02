@@ -2,7 +2,7 @@
  * GeneralException.h
  *
  *  Created on: 1 Jan 2021
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef GENERALEXCEPTION_H_
@@ -11,7 +11,8 @@
 #include <string>
 #include <stdexcept>
 
-class GeneralException: public std::runtime_error {
+class GeneralException: public std::runtime_error
+{
 public:
 	GeneralException(std::string exceptionMsg);
 	virtual ~GeneralException();

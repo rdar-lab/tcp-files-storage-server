@@ -2,7 +2,7 @@
  * CommunicationUtils.h
  *
  *  Created on: 2 Jan 2021
- *      Author: xmaster
+ *      Author: Roy Dar
  */
 
 #ifndef COMMUNICATIONSERILIZATIONHELPER_H_
@@ -12,8 +12,8 @@
 #include "ByteBuffer.h"
 #include <boost/asio.hpp>
 
-
-class CommunicationSerilizationHelper {
+class CommunicationSerilizationHelper
+{
 public:
 	CommunicationSerilizationHelper(boost::asio::ip::tcp::socket *socket);
 	virtual ~CommunicationSerilizationHelper();
@@ -26,7 +26,7 @@ public:
 	std::string readStr(unsigned short size);
 	void writeStr(std::string data);
 	ByteBuffer* readBytes(unsigned int size);
-	void writeBytes(ByteBuffer* data);
+	void writeBytes(ByteBuffer *data);
 private:
 	boost::asio::ip::tcp::socket *socket;
 };
