@@ -7,12 +7,14 @@
 
 #include "FilesRepository.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "Constants.h"
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include "GeneralException.h"
 #include "FileNotFoundException.h"
+#include "FileByteBuffer.h"
 
 namespace fs = boost::filesystem;
 
@@ -72,7 +74,7 @@ ByteBuffer* readFile(std::string path)
 	if (fs::exists(file_path) && fs::is_regular_file(file_path))
 	{
 		std::cout << "File exists, returning it..." << std::endl;
-		return NULL; //TODO: implement this
+		return new FileByteBuffer(path);
 	}
 	else
 	{
@@ -84,7 +86,10 @@ void writeFile(std::string path, ByteBuffer *buffer)
 {
 	path = fs::current_path().string() + PATH_SEPERATOR + path;
 	std::cout << "Writing to file: " << path << std::endl;
-	// TODO: implement this
+	std::ofstream dest_file;
+	dest_file.open(path, std::ios::binary);
+	buffer->sendToStream(dest_file);
+	dest_file.close();
 }
 
 std::list<std::string> listFilesInDir(std::string path)

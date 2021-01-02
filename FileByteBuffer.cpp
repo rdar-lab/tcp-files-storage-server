@@ -16,7 +16,7 @@ FileByteBuffer::FileByteBuffer(std::string filePath)
 {
 	this->fileSize = fs::file_size(filePath);
 	this->sizeRead = 0;
-	this->fileStream.open(filePath, std::ifstream::binary);
+	this->fileStream.open(filePath, std::ios::binary);
 }
 
 FileByteBuffer::~FileByteBuffer()
