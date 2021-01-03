@@ -28,10 +28,11 @@ short int StrByteBuffer::readData(char *destinationBuffer,
 	{
 		amountToRead = lenToReadInput;
 	}
-	const char *subStr = this->str.substr(this->offset,
-			this->offset + amountToRead).c_str();
 
-	std::copy(subStr, subStr + (amountToRead), destinationBuffer);
+	std::string subStr = this->str.substr(this->offset, amountToRead);
+	const char *charArr = subStr.c_str();
+
+	std::copy(charArr, charArr + (amountToRead), destinationBuffer);
 
 	this->offset = this->offset + amountToRead;
 	return amountToRead;

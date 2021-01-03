@@ -12,6 +12,7 @@
 #include "Constants.h"
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/algorithm/string.hpp>
 #include "GeneralException.h"
 #include "FileNotFoundException.h"
 #include "FileByteBuffer.h"
@@ -20,7 +21,7 @@ namespace fs = boost::filesystem;
 
 void createDirectoryIfNotExists(std::string path)
 {
-	path = fs::current_path().string() + PATH_SEPERATOR + path;
+	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
 	std::cout << "Validating directory exists " << path << std::endl;
 	fs::path dir_path(path);
 	if (fs::exists(dir_path) && fs::is_directory(dir_path))
@@ -44,7 +45,7 @@ void createDirectoryIfNotExists(std::string path)
 
 void deleteFileIfExists(std::string path)
 {
-	path = fs::current_path().string() + PATH_SEPERATOR + path;
+	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
 	std::cout << "Checking if file exists " << path << std::endl;
 	fs::path file_path(path);
 	if (fs::exists(file_path) && fs::is_regular_file(file_path))
@@ -68,7 +69,7 @@ void deleteFileIfExists(std::string path)
 
 ByteBuffer* readFile(std::string path)
 {
-	path = fs::current_path().string() + PATH_SEPERATOR + path;
+	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
 	std::cout << "Checking if file exists " << path << std::endl;
 	fs::path file_path(path);
 	if (fs::exists(file_path) && fs::is_regular_file(file_path))
@@ -84,7 +85,7 @@ ByteBuffer* readFile(std::string path)
 
 void writeFile(std::string path, ByteBuffer *buffer)
 {
-	path = fs::current_path().string() + PATH_SEPERATOR + path;
+	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
 	std::cout << "Writing to file: " << path << std::endl;
 	std::ofstream dest_file;
 	dest_file.open(path, std::ios::binary);
@@ -94,7 +95,7 @@ void writeFile(std::string path, ByteBuffer *buffer)
 
 std::list<std::string> listFilesInDir(std::string path)
 {
-	path = fs::current_path().string() + PATH_SEPERATOR + path;
+	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
 	std::cout << "Listing all files in directory " << path << std::endl;
 
 	std::list<std::string> result;
@@ -131,45 +132,59 @@ FilesRepository* FilesRepository::getInstance()
 	return singleInstance;
 }
 
-void validateFileName(std::string fileName)
+std::string validateFileName(std::string fileName)
 {
+	boost::trim(fileName);
+
+	if (fileName.size()==0)
+	{
+		throw GeneralException("File-name is empty");
+	}
+
 	if (fileName.find('/') != std::string::npos
 			|| fileName.find('\\') != std::string::npos
 			|| fileName.find("..") != std::string::npos)
 	{
 		throw GeneralException("Invalid chars detected in file name, aborting");
 	}
+
+	return fileName;
 }
 
 std::string FilesRepository::saveFile(unsigned int userId, std::string fileName,
 		ByteBuffer *dataBuffer)
 {
-	validateFileName(fileName);
-	std::string userDir = FILE_REPOSITORY_FOLDER + PATH_SEPERATOR + userId;
+	fileName = validateFileName(fileName);
+	std::string userDir = std::string(FILE_REPOSITORY_FOLDER) + std::string(PATH_SEPERATOR) + std::to_string(userId);
 	createDirectoryIfNotExists(userDir);
-	writeFile(userDir + PATH_SEPERATOR + fileName, dataBuffer);
+
+	if (dataBuffer == NULL){
+		throw GeneralException("Cannot upload file without payload");
+	}
+
+	writeFile(userDir + std::string(PATH_SEPERATOR) + fileName, dataBuffer);
 	return fileName;
 }
 
 void FilesRepository::deleteFile(unsigned int userId, std::string fileName)
 {
-	validateFileName(fileName);
-	std::string userDir = FILE_REPOSITORY_FOLDER + PATH_SEPERATOR + userId;
+	fileName = validateFileName(fileName);
+	std::string userDir = std::string(FILE_REPOSITORY_FOLDER) + std::string(PATH_SEPERATOR) + std::to_string(userId);
 	createDirectoryIfNotExists(userDir);
-	deleteFileIfExists(userDir + PATH_SEPERATOR + fileName);
+	deleteFileIfExists(userDir + std::string(PATH_SEPERATOR) + fileName);
 }
 
 ByteBuffer* FilesRepository::getFile(unsigned int userId, std::string fileName)
 {
-	validateFileName(fileName);
-	std::string userDir = FILE_REPOSITORY_FOLDER + PATH_SEPERATOR + userId;
+	fileName = validateFileName(fileName);
+	std::string userDir = std::string(FILE_REPOSITORY_FOLDER) + std::string(PATH_SEPERATOR) + std::to_string(userId);
 	createDirectoryIfNotExists(userDir);
-	return readFile(userDir + PATH_SEPERATOR + fileName);
+	return readFile(userDir + std::string(PATH_SEPERATOR) + fileName);
 }
 
 std::list<std::string> FilesRepository::getFileNames(unsigned int userId)
 {
-	std::string userDir = FILE_REPOSITORY_FOLDER + PATH_SEPERATOR + userId;
+	std::string userDir = std::string(FILE_REPOSITORY_FOLDER) + std::string(PATH_SEPERATOR) + std::to_string(userId);
 	createDirectoryIfNotExists(userDir);
 	return listFilesInDir(userDir);
 }

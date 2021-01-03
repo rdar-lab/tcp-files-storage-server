@@ -23,9 +23,9 @@ public:
 	void writeShort(unsigned short data);
 	unsigned int readInt();
 	void writeInt(unsigned int data);
-	std::string readStr(unsigned short size);
+	std::string readStr();
 	void writeStr(std::string data);
-	ByteBuffer* readBytes(unsigned int size);
+	ByteBuffer* readBytes();
 	void writeBytes(ByteBuffer *data);
 private:
 	boost::asio::ip::tcp::socket *socket;

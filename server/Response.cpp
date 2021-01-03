@@ -51,7 +51,7 @@ std::string Response::getFileName() const
 
 ByteBuffer* Response::getPayload() const
 {
-	return this->getPayload();
+	return this->payload;
 }
 
 std::ostream& operator<<(std::ostream &os, const Response &resp)

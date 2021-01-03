@@ -16,7 +16,8 @@ unsigned int convertToNum(char *buff, unsigned short sizeOfBuffer)
 	for (int i = sizeOfBuffer - 1; i >= 0; i--)
 	{
 		result = result << 8;
-		result = result + buff[i];
+		unsigned char val = buff[i];
+		result = result + val;
 	}
 	return result;
 }
@@ -99,8 +100,14 @@ void CommunicationSerilizationHelper::writeInt(unsigned int data)
 	writeNum(socket, data, 4);
 }
 
-std::string CommunicationSerilizationHelper::readStr(unsigned short size)
+std::string CommunicationSerilizationHelper::readStr()
 {
+	unsigned short size = readShort();
+	if (size > MAX_STR_LEN)
+	{
+		throw GeneralException("Str is over the maximum length");
+	}
+
 	char buffer[size + 1];
 	size_t bytesRead = boost::asio::read(*socket,
 			boost::asio::buffer(buffer, size));
@@ -125,8 +132,15 @@ void CommunicationSerilizationHelper::writeStr(std::string data)
 
 }
 
-ByteBuffer* CommunicationSerilizationHelper::readBytes(unsigned int size)
+ByteBuffer* CommunicationSerilizationHelper::readBytes()
 {
+	unsigned int size = readInt();
+
+	if (size > MAX_BYTES_LEN)
+	{
+		throw GeneralException("Bytes is over the maximum length");
+	}
+
 	return new SocketByteBuffer(this->socket, size);
 }
 

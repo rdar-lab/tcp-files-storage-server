@@ -29,23 +29,13 @@ Request* RequestReader::readRequest()
 	std::string fileName = "";
 	if (op < 202)
 	{
-		unsigned short nameLen = helper.readShort();
-		if (nameLen > MAX_FILE_NAME_LENGTH)
-		{
-			throw GeneralException("Name is over the maximum length");
-		}
-		fileName = helper.readStr(nameLen);
+		fileName = helper.readStr();
 	}
 
 	ByteBuffer *payload = NULL;
 	if (op == 100)
 	{
-		unsigned int payloadLen = helper.readInt();
-		if (payloadLen > MAX_PAYLOAD_SIZE_BYTES)
-		{
-			throw GeneralException("Payload is over the maximum length");
-		}
-		payload = helper.readBytes(payloadLen);
+		payload = helper.readBytes();
 	}
 
 	return new Request(version, userId, op, fileName, payload);

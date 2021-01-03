@@ -132,4 +132,6 @@ void CommunicationManager::handleClient(socket_ptr socket)
 	}
 	CommunicationManager::getInstance()->numOfConnections--;
 	socket->close();
+	std::cout << remote_address << ": Request handling finished" << std::endl;
+
 }
