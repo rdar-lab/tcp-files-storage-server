@@ -2,6 +2,10 @@ from socket_helper import SockHelper
 
 
 class Request:
+    #
+    # Request object that supports request fields "user_id, version, op, file_name, send_file"
+    # Supports writing to socket the information
+    #
 
     def __init__(self, user_id, version, op, file_name: str = None, send_file=None):
         self.user_id = user_id
@@ -15,6 +19,10 @@ class Request:
                                                                       self.file_name)
 
     def send(self, sock):
+        #
+        # Sends the request to the socket
+        #
+
         helper = SockHelper(sock)
         helper.write_int(self.user_id)
         helper.write_byte(self.version)

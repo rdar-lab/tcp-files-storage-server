@@ -9,34 +9,58 @@ _BUFFER_SIZE = 1000
 
 
 class SockHelper:
+    #
+    # Helper to work with a socket
+    #
     def __init__(self, sock: socket.socket):
         self.sock = sock
 
     def read_byte(self):
+        #
+        # Read an unsigned number of size 1 bytes
+        #
         data = self.__read_binary(1)
         return struct.Struct('< B').unpack(data)[0]
 
     def write_byte(self, data):
+        #
+        # writes an unsigned number of size 1 bytes
+        #
         data = struct.Struct('< B').pack(data)
         self.__write_binary(data)
 
     def read_short(self):
+        #
+        # Read an unsigned number of size 2 bytes
+        #
         data = self.__read_binary(2)
         return struct.Struct('< H').unpack(data)[0]
 
     def write_short(self, data):
+        #
+        # Writes an unsigned number of size 2 bytes
+        #
         data = struct.Struct('< H').pack(data)
         self.__write_binary(data)
 
     def read_int(self):
+        #
+        # Reads an unsigned number of size 4 bytes
+        #
         data = self.__read_binary(4)
         return struct.Struct('< I').unpack(data)[0]
 
     def write_int(self, data):
+        #
+        # Writes an unsigned number of size 4 bytes
+        #
         data = struct.Struct('< I').pack(data)
         self.__write_binary(data)
 
     def read_str(self):
+        #
+        # Reads an STR (reads first the size)
+        #
         size = self.read_short()
 
         if size > _MAX_STR_LEN:
@@ -46,12 +70,18 @@ class SockHelper:
         return str(struct.Struct('{0}s'.format(size)).unpack(data)[0], encoding="UTF-8")
 
     def write_str(self, string):
+        #
+        # Writes an STR (writes first the size)
+        #
         data_raw = bytes(string, encoding="UTF-8")
         data = struct.Struct('{0}s'.format(len(data_raw))).pack(data_raw)
         self.write_short(len(data_raw))
         self.__write_binary(data)
 
     def read_bytes(self):
+        #
+        # Reads a bytes array with first the size
+        #
         size = self.read_int()
 
         if size > _MAX_BYTES_LEN:
@@ -60,10 +90,16 @@ class SockHelper:
         return self.__read_binary(size)
 
     def write_bytes(self, data):
+        #
+        # Writes a bytes array with first the size
+        #
         self.write_int(len(data))
         self.__write_binary(data)
 
     def send_file(self, file_name):
+        #
+        # Sends a file to the socket, using chunks
+        #
         file_size = os.path.getsize(file_name)
 
         print("Sending file {1} which is of size {0}".format(file_size, file_name))
@@ -78,6 +114,9 @@ class SockHelper:
                 self.__write_binary(piece)
 
     def receive_file(self, file_name):
+        #
+        # Reads a file from the socket, using chunks
+        #
         size = self.read_int()
         amount_left = size
 
@@ -96,6 +135,9 @@ class SockHelper:
                 amount_left = amount_left - amount_to_read
 
     def __read_binary(self, length):
+        #
+        # Reads binary data from the socket of a specific length
+        #
         result = bytes()
         amount_read = 0
         while amount_read < length:
@@ -107,4 +149,7 @@ class SockHelper:
         return result
 
     def __write_binary(self, data):
+        #
+        # Writes a binary data to the socket
+        #
         self.sock.send(data)

@@ -1,6 +1,5 @@
 import os
 import random
-from http import client
 
 import utils
 from client_comm_manager import ClientCommManager

@@ -18,12 +18,18 @@ _GENERAL_FAILURE_STATUS = 1003
 
 
 class _ServerCommManagerHelper:
+    #
+    # Helper class for the communication, sends the requests and get the responses
+    #
 
     def __init__(self, host, port):
         self.host = host
         self.port = port
 
     def send_request_and_get_response(self, request: Request):
+        #
+        # Sends the request and gets back the response
+        #
         print("Opening connection to: {0}:{1}".format(self.host, self.port))
         with socket.create_connection((self.host, self.port)) as sock:
             print("Sending request: {}".format(request))
@@ -34,6 +40,10 @@ class _ServerCommManagerHelper:
 
 
 class ClientCommManager:
+    #
+    # The client communication manager
+    #
+
     def __init__(self, host, port, user_id):
         self.host = host
         self.port = port
@@ -41,6 +51,10 @@ class ClientCommManager:
         self.comm_helper = _ServerCommManagerHelper(self.host, self.port)
 
     def send_file(self, file_name):
+        #
+        # Sends the file to the server
+        #
+
         req = Request(self.used_id, 0, _SAVE_FILE_OP, file_name, True)
         resp = self.comm_helper.send_request_and_get_response(req)
 
@@ -48,6 +62,10 @@ class ClientCommManager:
             raise Exception("File save operation failed with status code = {}".format(resp.status))
 
     def read_file(self, file_name):
+        #
+        # Reads the file from the server
+        #
+
         req = Request(self.used_id, 0, _READ_FILE_OP, file_name)
         resp = self.comm_helper.send_request_and_get_response(req)
         if resp.status == _READ_FILE_SUCCESS_STATUS:
@@ -58,6 +76,10 @@ class ClientCommManager:
             raise Exception("File read operation failed with status code = {}".format(resp.status))
 
     def delete_file(self, file_name):
+        #
+        # Delete the file
+        #
+
         req = Request(self.used_id, 0, _DELETE_FILE_OP, file_name)
         resp = self.comm_helper.send_request_and_get_response(req)
         if resp.status == _DELETE_FILE_SUCCESS_STATUS:
@@ -68,6 +90,10 @@ class ClientCommManager:
             raise Exception("File read operation failed with status code = {}".format(resp.status))
 
     def list_all_files(self):
+        #
+        # List all files
+        #
+
         req = Request(self.used_id, 0, _GET_ALL_FILENAMES_OP)
         resp = self.comm_helper.send_request_and_get_response(req)
         if resp.status == _GET_ALL_FILENAMES_SUCCESS_STATUS:
