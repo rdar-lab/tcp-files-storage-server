@@ -4,6 +4,9 @@
 
 -include ../makefile.init
 
+BOOST_SRC_DIR := /home/xmaster/defensive-security/maman14/boost/boost_1_75_0
+BOOST_LIB_DIR := /home/xmaster/defensive-security/maman14/boost/boost_1_75_0/stage/lib
+
 RM := rm -rf
 
 # All of the sources participating in the build are defined here
@@ -43,7 +46,7 @@ all: tcp-storage-server
 tcp-storage-server: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L/home/xmaster/defensive-security/maman14/boost/boost_1_75_0/stage/lib -static -o "tcp-storage-server" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L$(BOOST_LIB_DIR) -static -o "tcp-storage-server" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
