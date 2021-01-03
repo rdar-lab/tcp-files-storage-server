@@ -175,7 +175,7 @@ class ServerCommManager:
         else:
             raise Exception("File read operation failed with status code = {}".format(resp.status))
 
-    def delete_file(self, file_name, destination_file_name):
+    def delete_file(self, file_name):
         req = Request(self.used_id, 0, _DELETE_FILE_OP, file_name)
         resp = self.comm_helper.send_request_and_get_response(req)
         if resp.status == _DELETE_FILE_SUCCESS_STATUS:
@@ -199,5 +199,5 @@ class ServerCommManager:
 
 if __name__ == '__main__':
     server = ServerCommManager("127.0.0.1", 1234, 1234)
-    all_files = server.delete_file()
+    all_files = server.delete_file(".gitignore")
     print(all_files)

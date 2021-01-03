@@ -141,7 +141,9 @@ std::string validateFileName(std::string fileName)
 		throw GeneralException("File-name is empty");
 	}
 
-	if (fileName.find('/') != std::string::npos
+	if (
+			fileName.find('*') != std::string::npos
+			|| fileName.find('/') != std::string::npos
 			|| fileName.find('\\') != std::string::npos
 			|| fileName.find("..") != std::string::npos)
 	{
