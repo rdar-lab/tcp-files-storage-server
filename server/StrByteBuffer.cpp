@@ -20,7 +20,7 @@ StrByteBuffer::~StrByteBuffer()
 {
 }
 
-short int StrByteBuffer::readData(char *destinationBuffer,
+unsigned short int StrByteBuffer::readData(char *destinationBuffer,
 		unsigned short int lenToReadInput)
 {
 	unsigned short amountToRead = getBytesLeft();

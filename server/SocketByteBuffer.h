@@ -11,14 +11,34 @@
 #include "ByteBuffer.h"
 #include <boost/asio.hpp>
 
+/*
+ * SocketByteBuffer
+ * ----------------
+ * An implementation of a byte buffer bounded to a socket and limited to a specific size
+ */
 class SocketByteBuffer: public ByteBuffer
 {
 public:
+	/*
+	 * Ctor
+	 */
 	SocketByteBuffer(boost::asio::ip::tcp::socket *socket,
 			unsigned int dataLen);
+
+	/*
+	 * Dtor
+	 */
 	virtual ~SocketByteBuffer();
-	virtual short int readData(char *destinationBuffer,
+
+	/*
+	 * Reads a chunk of data
+	 */
+	virtual unsigned short int readData(char *destinationBuffer,
 			unsigned short int lenToRead) override;
+
+	/*
+	 * Returns the amount of data left to read
+	 */
 	virtual unsigned int getBytesLeft() override;
 
 private:

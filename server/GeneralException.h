@@ -11,10 +11,22 @@
 #include <string>
 #include <stdexcept>
 
+/*
+ * GeneralException
+ * ----------------
+ * A general exception class
+ */
 class GeneralException: public std::runtime_error
 {
 public:
+	/*
+	 * Ctor
+	 */
 	GeneralException(std::string exceptionMsg);
+
+	/*
+	 * Dtor
+	 */
 	virtual ~GeneralException();
 };
 

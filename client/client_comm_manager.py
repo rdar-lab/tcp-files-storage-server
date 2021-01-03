@@ -1,3 +1,4 @@
+import os
 import socket
 from request import Request
 from response import Response
@@ -97,10 +98,13 @@ class ClientCommManager:
         req = Request(self.used_id, 0, _GET_ALL_FILENAMES_OP)
         resp = self.comm_helper.send_request_and_get_response(req)
         if resp.status == _GET_ALL_FILENAMES_SUCCESS_STATUS:
-            with open(resp.storage_file, "rb") as file:
-                payload = file.read()
-                files = str(payload, encoding="UTF-8").split("\n")
-                return [file for file in files if len(file) > 0]
+            try:
+                with open(resp.storage_file, "rb") as file:
+                    payload = file.read()
+                    files = str(payload, encoding="UTF-8").split("\n")
+                    return [file for file in files if len(file) > 0]
+            finally:
+                os.remove(resp.storage_file)
         elif resp.status == _NO_FILES_ON_SERVER_FAILURE_STATUS:
             raise Exception("No files for user on server")
         else:

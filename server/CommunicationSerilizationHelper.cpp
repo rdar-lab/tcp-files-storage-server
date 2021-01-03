@@ -10,6 +10,10 @@
 #include "SocketByteBuffer.h"
 #include "Constants.h"
 
+/*
+ * Convert byte stream to a number based on the buffer and size
+ * Uses little endian
+ */
 unsigned int convertToNum(char *buff, unsigned short sizeOfBuffer)
 {
 	unsigned int result = 0;
@@ -22,6 +26,9 @@ unsigned int convertToNum(char *buff, unsigned short sizeOfBuffer)
 	return result;
 }
 
+/*
+ * Converts a number to a buffer of bytes uses little endian
+ */
 void convertToBytes(unsigned int num, char *buff, unsigned short sizeOfBuffer)
 {
 	unsigned int temp = num;

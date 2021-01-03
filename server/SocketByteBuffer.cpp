@@ -21,10 +21,11 @@ SocketByteBuffer::~SocketByteBuffer()
 
 }
 
-short int SocketByteBuffer::readData(char *destinationBuffer,
+unsigned short int SocketByteBuffer::readData(char *destinationBuffer,
 		unsigned short lenToRead)
 {
-	if (lenToRead > this->getBytesLeft()){
+	if (lenToRead > this->getBytesLeft())
+	{
 		lenToRead = this->getBytesLeft();
 	}
 

@@ -10,15 +10,40 @@
 
 #include <iostream>
 
+/*
+ * ByteBuffer
+ * ----------
+ * An abstract class that allows chunked communication with bytes
+ */
 class ByteBuffer
 {
 public:
+	/*
+	 * Dtor
+	 */
 	virtual ~ByteBuffer();
+
+	/*
+	 * Returns the amount of bytes left on this buffer for reading
+	 */
 	virtual unsigned int getBytesLeft() = 0;
-	virtual short readData(char *destinationBuffer,
+
+	/*
+	 * Read the data into the input buffer with a maximum of len to read amount as
+	 * parameter
+	 */
+	virtual unsigned short readData(char *destinationBuffer,
 			unsigned short lenToRead) = 0;
+
+	/*
+	 * Sends all the data to a given output stream
+	 */
 	void sendToStream(std::ostream &os);
 protected:
+
+	/*
+	 * Protected Ctor, since this is an abstract class
+	 */
 	ByteBuffer();
 };
 

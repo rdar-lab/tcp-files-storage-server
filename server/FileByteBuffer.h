@@ -13,13 +13,33 @@
 #include "ByteBuffer.h"
 #include <fstream>
 
+/*
+ * FileByteBuffer
+ * --------------
+ * A byte buffer implementation for reading a from a file
+ */
 class FileByteBuffer: public ByteBuffer
 {
 public:
+	/*
+	 * Ctor
+	 */
 	FileByteBuffer(std::string filePath);
+
+	/*
+	 * Dtor
+	 */
 	virtual ~FileByteBuffer();
-	virtual short int readData(char *destinationBuffer,
+
+	/*
+	 * Reads the data based on chunks
+	 */
+	virtual unsigned short int readData(char *destinationBuffer,
 			unsigned short int lenToRead);
+
+	/*
+	 * Returns the amount of data left to read
+	 */
 	virtual unsigned int getBytesLeft();
 private:
 	unsigned int fileSize;

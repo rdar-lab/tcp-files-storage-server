@@ -10,10 +10,22 @@
 
 #include <stdexcept>
 
+/*
+ * FileNotFoundException
+ * ---------------------
+ * Exception that is thrown when the file is not found
+ */
 class FileNotFoundException: public std::exception
 {
 public:
+	/*
+	 * Ctor
+	 */
 	FileNotFoundException();
+
+	/*
+	 * Dtor
+	 */
 	virtual ~FileNotFoundException();
 };
 

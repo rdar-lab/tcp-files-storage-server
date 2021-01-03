@@ -19,6 +19,10 @@
 
 namespace fs = boost::filesystem;
 
+/*
+ * Checks if the directory exists and if not creates it.
+ * Assumes the path is relative to current working dir
+ */
 void createDirectoryIfNotExists(std::string path)
 {
 	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
@@ -43,6 +47,9 @@ void createDirectoryIfNotExists(std::string path)
 	}
 }
 
+/*
+ * Deletes a file if it exists. If it does not exist a FileNotFound exception will be thrown
+ */
 void deleteFileIfExists(std::string path)
 {
 	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
@@ -68,6 +75,9 @@ void deleteFileIfExists(std::string path)
 	}
 }
 
+/*
+ * Reads a file and returns it
+ */
 ByteBuffer* readFile(std::string path)
 {
 	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
@@ -85,6 +95,9 @@ ByteBuffer* readFile(std::string path)
 	}
 }
 
+/*
+ * Writes a file
+ */
 void writeFile(std::string path, ByteBuffer *buffer)
 {
 	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
@@ -95,6 +108,9 @@ void writeFile(std::string path, ByteBuffer *buffer)
 	dest_file.close();
 }
 
+/*
+ * Lists the files in a directory
+ */
 std::list<std::string> listFilesInDir(std::string path)
 {
 	path = fs::current_path().string() + std::string(PATH_SEPERATOR) + path;
@@ -113,6 +129,30 @@ std::list<std::string> listFilesInDir(std::string path)
 	}
 	return result;
 }
+
+/*
+ * Validates the file-name to avoid security issues
+ */
+std::string validateFileName(std::string fileName)
+{
+	boost::trim(fileName);
+
+	if (fileName.size() == 0)
+	{
+		throw GeneralException("File-name is empty");
+	}
+
+	if (fileName.find('*') != std::string::npos
+			|| fileName.find('/') != std::string::npos
+			|| fileName.find('\\') != std::string::npos
+			|| fileName.find("..") != std::string::npos)
+	{
+		throw GeneralException("Invalid chars detected in file name, aborting");
+	}
+
+	return fileName;
+}
+
 
 FilesRepository::FilesRepository()
 {
@@ -134,35 +174,16 @@ FilesRepository* FilesRepository::getInstance()
 	return singleInstance;
 }
 
-std::string validateFileName(std::string fileName)
-{
-	boost::trim(fileName);
-
-	if (fileName.size()==0)
-	{
-		throw GeneralException("File-name is empty");
-	}
-
-	if (
-			fileName.find('*') != std::string::npos
-			|| fileName.find('/') != std::string::npos
-			|| fileName.find('\\') != std::string::npos
-			|| fileName.find("..") != std::string::npos)
-	{
-		throw GeneralException("Invalid chars detected in file name, aborting");
-	}
-
-	return fileName;
-}
-
 std::string FilesRepository::saveFile(unsigned int userId, std::string fileName,
 		ByteBuffer *dataBuffer)
 {
 	fileName = validateFileName(fileName);
-	std::string userDir = std::string(FILE_REPOSITORY_FOLDER) + std::string(PATH_SEPERATOR) + std::to_string(userId);
+	std::string userDir = std::string(FILE_REPOSITORY_FOLDER)
+			+ std::string(PATH_SEPERATOR) + std::to_string(userId);
 	createDirectoryIfNotExists(userDir);
 
-	if (dataBuffer == NULL){
+	if (dataBuffer == NULL)
+	{
 		throw GeneralException("Cannot upload file without payload");
 	}
 
@@ -173,7 +194,8 @@ std::string FilesRepository::saveFile(unsigned int userId, std::string fileName,
 void FilesRepository::deleteFile(unsigned int userId, std::string fileName)
 {
 	fileName = validateFileName(fileName);
-	std::string userDir = std::string(FILE_REPOSITORY_FOLDER) + std::string(PATH_SEPERATOR) + std::to_string(userId);
+	std::string userDir = std::string(FILE_REPOSITORY_FOLDER)
+			+ std::string(PATH_SEPERATOR) + std::to_string(userId);
 	createDirectoryIfNotExists(userDir);
 	deleteFileIfExists(userDir + std::string(PATH_SEPERATOR) + fileName);
 }
@@ -181,14 +203,16 @@ void FilesRepository::deleteFile(unsigned int userId, std::string fileName)
 ByteBuffer* FilesRepository::getFile(unsigned int userId, std::string fileName)
 {
 	fileName = validateFileName(fileName);
-	std::string userDir = std::string(FILE_REPOSITORY_FOLDER) + std::string(PATH_SEPERATOR) + std::to_string(userId);
+	std::string userDir = std::string(FILE_REPOSITORY_FOLDER)
+			+ std::string(PATH_SEPERATOR) + std::to_string(userId);
 	createDirectoryIfNotExists(userDir);
 	return readFile(userDir + std::string(PATH_SEPERATOR) + fileName);
 }
 
 std::list<std::string> FilesRepository::getFileNames(unsigned int userId)
 {
-	std::string userDir = std::string(FILE_REPOSITORY_FOLDER) + std::string(PATH_SEPERATOR) + std::to_string(userId);
+	std::string userDir = std::string(FILE_REPOSITORY_FOLDER)
+			+ std::string(PATH_SEPERATOR) + std::to_string(userId);
 	createDirectoryIfNotExists(userDir);
 	return listFilesInDir(userDir);
 }

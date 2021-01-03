@@ -29,6 +29,7 @@ CommunicationManager *CommunicationManager::singleInstance = NULL;
 
 CommunicationManager* CommunicationManager::getInstance()
 {
+	// Check if the instance is initialized, and if not create it
 	if (CommunicationManager::singleInstance == NULL)
 	{
 		CommunicationManager::singleInstance = new CommunicationManager();
@@ -65,8 +66,12 @@ void CommunicationManager::runServer(std::string host, unsigned int port)
 		acceptor.accept(*socket);
 		std::cout << "New connection detected" << std::endl;
 		this->numOfConnections++;
+
+		// Threaded implementation
 		std::thread(CommunicationManager::handleClient, socket).detach();
-//		CommunicationManager::handleClient(&socket);
+
+		// Non-Threaded implementation
+//		CommunicationManager::handleClient(socket);
 	}
 
 	std::cout << "Incorrect state detected, server quit" << std::endl;

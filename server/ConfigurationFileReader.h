@@ -9,14 +9,33 @@
 #define CONFIGURATIONFILEREADER_H_
 #include <string>
 
+/*
+ * ConfigurationFileReader
+ * -----------------------
+ * Reads the configuration file for the server.
+ * Supports both a format of file that contains 'host:port' or just 'port'
+ */
 class ConfigurationFileReader
 {
 public:
+	/*
+	 * Ctor
+	 */
 	ConfigurationFileReader(std::string configurationFileName);
 
+	/*
+	 * Returns the server port from the configuration
+	 */
 	unsigned short getServerPort();
+
+	/*
+	 * Returns the server host from the configuration, or 0.0.0.0 if not configured
+	 */
 	std::string getServerHost();
 
+	/*
+	 * Dtor
+	 */
 	virtual ~ConfigurationFileReader();
 private:
 	unsigned int serverPort;
