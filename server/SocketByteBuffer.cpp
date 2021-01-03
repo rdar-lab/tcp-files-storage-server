@@ -24,6 +24,10 @@ SocketByteBuffer::~SocketByteBuffer()
 short int SocketByteBuffer::readData(char *destinationBuffer,
 		unsigned short lenToRead)
 {
+	if (lenToRead > this->getBytesLeft()){
+		lenToRead = this->getBytesLeft();
+	}
+
 	size_t amount = boost::asio::read(*socket,
 			boost::asio::buffer(destinationBuffer, lenToRead));
 	if (amount <= 0)
