@@ -1,3 +1,4 @@
+import os
 import random
 from http import client
 
@@ -42,7 +43,8 @@ if __name__ == '__main__':
 
     try:
         print("Getting the first file")
-        client.read_file(file_names[0], "tmp")
+        tmp_file_name = client.read_file(file_names[0])
+        os.rename(tmp_file_name, "tmp")
         print("File read was success")
     except Exception as ex:
         print("Error while reading file: {}".format(ex))
@@ -56,7 +58,7 @@ if __name__ == '__main__':
 
     try:
         print("Getting the first file")
-        client.read_file(file_names[0], "tmp2")
+        client.read_file(file_names[0])
         print("File read was success")
     except Exception as ex:
         print("Error while reading file: {}".format(ex))

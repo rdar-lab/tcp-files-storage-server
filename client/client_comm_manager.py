@@ -41,20 +41,17 @@ class ClientCommManager:
         self.comm_helper = _ServerCommManagerHelper(self.host, self.port)
 
     def send_file(self, file_name):
-        with open(file_name, "rb") as file:
-            data = bytes(file.read())
-            req = Request(self.used_id, 0, _SAVE_FILE_OP, file_name, data)
-            resp = self.comm_helper.send_request_and_get_response(req)
+        req = Request(self.used_id, 0, _SAVE_FILE_OP, file_name, True)
+        resp = self.comm_helper.send_request_and_get_response(req)
 
-            if resp.status != _SAVE_FILE_SUCCESS_STATUS:
-                raise Exception("File save operation failed with status code = {}".format(resp.status))
+        if resp.status != _SAVE_FILE_SUCCESS_STATUS:
+            raise Exception("File save operation failed with status code = {}".format(resp.status))
 
-    def read_file(self, file_name, destination_file_name):
+    def read_file(self, file_name):
         req = Request(self.used_id, 0, _READ_FILE_OP, file_name)
         resp = self.comm_helper.send_request_and_get_response(req)
         if resp.status == _READ_FILE_SUCCESS_STATUS:
-            with open(destination_file_name, "wb") as file:
-                file.write(resp.payload)
+            return resp.storage_file
         elif resp.status == _FILE_NOT_FOUND_FAILURE_STATUS:
             raise Exception("File not found error")
         else:
@@ -74,8 +71,10 @@ class ClientCommManager:
         req = Request(self.used_id, 0, _GET_ALL_FILENAMES_OP)
         resp = self.comm_helper.send_request_and_get_response(req)
         if resp.status == _GET_ALL_FILENAMES_SUCCESS_STATUS:
-            files = str(resp.payload, encoding="UTF-8").split("\n")
-            return [file for file in files if len(file) > 0]
+            with open(resp.storage_file, "rb") as file:
+                payload = file.read()
+                files = str(payload, encoding="UTF-8").split("\n")
+                return [file for file in files if len(file) > 0]
         elif resp.status == _NO_FILES_ON_SERVER_FAILURE_STATUS:
             raise Exception("No files for user on server")
         else:

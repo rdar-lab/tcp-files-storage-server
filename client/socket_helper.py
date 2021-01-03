@@ -1,8 +1,11 @@
+import os
 import socket
 import struct
 
 _MAX_STR_LEN = 255
 _MAX_BYTES_LEN = 1024 * 1024 * 10
+
+_BUFFER_SIZE = 1000
 
 
 class SockHelper:
@@ -59,6 +62,38 @@ class SockHelper:
     def write_bytes(self, data):
         self.write_int(len(data))
         self.__write_binary(data)
+
+    def send_file(self, file_name):
+        file_size = os.path.getsize(file_name)
+
+        print("Sending file {1} which is of size {0}".format(file_size, file_name))
+
+        self.write_int(file_size)
+
+        with open(file_name, "rb") as file:
+            while True:
+                piece = file.read(_BUFFER_SIZE)
+                if not piece:
+                    break
+                self.__write_binary(piece)
+
+    def receive_file(self, file_name):
+        size = self.read_int()
+        amount_left = size
+
+        if size > _MAX_BYTES_LEN:
+            raise Exception("Payload len is bigger than the maximum allowed")
+
+        print("Receiving file of size {0}, and storing at {1}".format(size, file_name))
+
+        with open(file_name, "wb") as file:
+            while amount_left > 0:
+                amount_to_read = amount_left
+                if amount_to_read > _BUFFER_SIZE:
+                    amount_to_read = _BUFFER_SIZE
+                data = self.__read_binary(amount_to_read)
+                file.write(data)
+                amount_left = amount_left - amount_to_read
 
     def __read_binary(self, length):
         result = bytes()

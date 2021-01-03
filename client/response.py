@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from socket_helper import SockHelper
 
 
@@ -12,7 +14,9 @@ class Response:
             self.file_name = helper.read_str()
 
         if self.status < 212:
-            self.payload = helper.read_bytes()
+            tmp_file_name = '{0}.{1}'.format(self.file_name, uuid4())
+            helper.receive_file(tmp_file_name)
+            self.storage_file = tmp_file_name
 
     def __str__(self) -> str:
         return "version={0}, status={1}, filename={2}".format(self.version, self.status, self.file_name)
