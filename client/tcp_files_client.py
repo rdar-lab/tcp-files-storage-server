@@ -168,7 +168,7 @@ class ServerCommManager:
         req = Request(self.used_id, 0, _READ_FILE_OP, file_name)
         resp = self.comm_helper.send_request_and_get_response(req)
         if resp.status == _READ_FILE_SUCCESS_STATUS:
-            with open(destination_file_name, "rb") as file:
+            with open(destination_file_name, "wb") as file:
                 file.write(resp.payload)
         elif resp.status == _FILE_NOT_FOUND_FAILURE_STATUS:
             raise Exception("File not found error")
@@ -199,5 +199,4 @@ class ServerCommManager:
 
 if __name__ == '__main__':
     server = ServerCommManager("127.0.0.1", 1234, 1234)
-    all_files = server.delete_file(".gitignore")
-    print(all_files)
+    server.read_file("a.pdf","b.pdf")

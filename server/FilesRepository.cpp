@@ -63,6 +63,7 @@ void deleteFileIfExists(std::string path)
 	}
 	else
 	{
+		std::cout << "File not found" << std::endl;
 		throw FileNotFoundException();
 	}
 }
@@ -79,6 +80,7 @@ ByteBuffer* readFile(std::string path)
 	}
 	else
 	{
+		std::cout << "File not found" << std::endl;
 		throw FileNotFoundException();
 	}
 }
