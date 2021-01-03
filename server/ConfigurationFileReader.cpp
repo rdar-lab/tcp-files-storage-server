@@ -22,7 +22,7 @@ ConfigurationFileReader::ConfigurationFileReader(
 		{
 			std::string line;
 			getline(confFile, line);
-			int splitLoc = line.find(':');
+			const std::size_t splitLoc = line.find(':');
 			if (splitLoc == std::string::npos)
 			{
 				this->serverHost = "0.0.0.0";
