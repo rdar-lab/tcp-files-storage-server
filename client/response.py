@@ -34,7 +34,7 @@ class Response:
         #
         self.file_name = self.file_name.strip()
 
-        if len(self.file_name):
+        if len(self.file_name) == 0:
             raise Exception("File name is empty")
 
         if '..' in self.file_name or \
