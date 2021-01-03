@@ -4,8 +4,8 @@
 
 -include ../makefile.init
 
-BOOST_SRC_DIR := /home/xmaster/defensive-security/maman14/boost/boost_1_75_0
-BOOST_LIB_DIR := /home/xmaster/defensive-security/maman14/boost/boost_1_75_0/stage/lib
+BOOST_SRC_DIR := /usr/include
+BOOST_LIB_DIR := /usr/include
 
 RM := rm -rf
 
